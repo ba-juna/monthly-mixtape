@@ -103,6 +103,8 @@ body.editing .ticker{background:var(--f-red)}
 .bar a.bx:hover,.bar button.bx:hover{background:var(--notepad);color:var(--ink);text-decoration:none}
 .chip{border:1.5px solid var(--ink);background:none;padding:3px 8px;font-family:var(--f-body);font-size:11.5px;font-weight:500;text-transform:uppercase;letter-spacing:.02em;cursor:pointer;line-height:1.4;text-decoration:none;white-space:nowrap}
 .chip[aria-pressed="true"]{background:var(--notepad);color:var(--ink)}
+.chip.tag{border-color:#d9d9d5;color:#a3a39e;cursor:default}
+@media (hover:hover){button.chip:hover{background:var(--notepad);color:var(--ink)}}
 .zine .chip{position:relative;isolation:isolate;border-color:transparent}
 .zine .chip::after{content:"";position:absolute;inset:0;border:1.5px solid var(--ink);filter:url(#rough);pointer-events:none}
 .zine .chip[aria-pressed="true"]{background:none;color:inherit}
@@ -738,7 +740,7 @@ function month(m){
   <article class="detail">
     <div class="dphoto">${photo(m,["thin","2.3/1"],false,en(m))}</div>
     <div class="dinfo"><p class="sub kr">${esc(subtitle(m))}</p>
-      <div class="drow"><div class="meta"><button class="chip" data-k="year" data-v="${m.y}" data-only>${m.y}</button><button class="chip" data-k="season" data-v="${season[0]}" data-only>${season[1]}</button>${genres}</div>${editMode?`<button class="write small" data-igexport="${m.id}">인스타그램으로 내보내기</button>`:""}${am?`<a class="bx" href="${esc(am)}" target="_blank" rel="noopener">▶ apple music</a>`:""}</div></div>
+      <div class="drow"><div class="meta"><span class="chip tag">${m.y}</span><span class="chip tag">${season[1]}</span>${genres}</div>${editMode?`<button class="write small" data-igexport="${m.id}">인스타그램으로 내보내기</button>`:""}${am?`<a class="bx" href="${esc(am)}" target="_blank" rel="noopener">▶ apple music</a>`:""}</div></div>
     <section class="dj${writing?"":" solo"}" aria-label="${FULL[m.m-1]} ${m.y} 글과 곡 목록">
       ${writing?`<div class="dj-write"><span class="label">Liner notes</span>${writing}</div>`:""}${spine}${tracks}
     </section>
