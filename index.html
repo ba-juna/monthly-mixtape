@@ -358,6 +358,7 @@ a.bx:hover{background:var(--notepad);color:var(--ink)}
 .dj-tracks ol{list-style:none;margin:0;padding:0}
 .dj.solo .dj-tracks ol{column-count:2;column-gap:34px}
 .dj-tracks li{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:6px;align-items:baseline;border-bottom:1px solid rgba(120,40,70,.3);padding:3px 0;font-family:var(--f-pen);font-weight:500;font-size:20px;line-height:1.3;color:var(--ink-blue);break-inside:avoid}
+.dj-tracks li.hit .tt a,.dj-tracks li.hit .tt small{background:linear-gradient(transparent 50%,#ffe45c 50% 94%,transparent 94%);-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .dj-tracks li i{font-style:normal;font-family:var(--f-mono);font-size:11px;color:#b23a63}
 .dj-tracks li .tt{min-width:0}
 .dj-tracks li a{color:inherit;text-decoration:none}
@@ -577,6 +578,13 @@ const hand = s => esc(s).replace(/([\u3131-\u318E\uAC00-\uD7A3]+(?:[\s,.!?~]+[\u
 function cut(seed){ const pts=[], r=k=>((Math.sin(seed*91+k*37)+1)/2)*1.6; for(let i=0;i<=10;i++)pts.push(`${i*10}% ${r(i)}%`); for(let i=0;i<=10;i++)pts.push(`${100-r(i+20)}% ${i*10}%`); for(let i=10;i>=0;i--)pts.push(`${i*10}% ${100-r(i+40)}%`); for(let i=10;i>=0;i--)pts.push(`${r(i+60)}% ${i*10}%`); return `clip-path:polygon(${pts.join(",")})`; }
 const amSearch = t => "https://music.apple.com/kr/search?term="+encodeURIComponent(t[0]+" "+t[1]);
 const ytSearch = t => "https://www.youtube.com/results?search_query="+encodeURIComponent(t[1]+" "+t[0]+" official audio");
+// month page: a genre label marks its tracks and scrolls to the first one
+function hlGenre(g){
+  const b = document.querySelector(`[data-hl="${CSS.escape(g)}"]`), on = b.getAttribute("aria-pressed")!=="true";
+  document.querySelectorAll("[data-hl]").forEach(x=>x.setAttribute("aria-pressed", on && x===b));
+  const hits = [...document.querySelectorAll(".dj-tracks li[data-g]")].filter(li=>{ const y = on && li.dataset.g===g; li.classList.toggle("hit", y); return y; });
+  if (hits[0]) hits[0].scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"center"});
+}
 // the player loads only after the black bar is pressed
 let ytOpen = null;
 function ytPlayer(yt){
@@ -702,7 +710,7 @@ function trackRow(m,t,n){
   const k = tkey(m,t), note = NOTES.t[k] || {};
   const link = safeUrl(note.yt||"") || amSearch(t);
   const ed = editMode && openRow===k;
-  return `<li><i>${String(n).padStart(2,"0")}</i><span class="tt"><a href="${esc(link)}" target="_blank" rel="noopener">${hand(t[0])}</a><small>${hand(t[1])}</small>${editMode?` <button class="mini" data-row="${esc(k)}">${note.memo||note.yt?"메모 고치기":"+ 메모"}</button>`:""}${note.memo && !ed ? `<span class="memo">${hand(note.memo)}</span>`:""}</span><b>${t[3]?mmss(t[3]):""}</b>
+  return `<li data-g="${esc(t[2]||"")}"><i>${String(n).padStart(2,"0")}</i><span class="tt"><a href="${esc(link)}" target="_blank" rel="noopener">${hand(t[0])}</a><small>${hand(t[1])}</small>${editMode?` <button class="mini" data-row="${esc(k)}">${note.memo||note.yt?"메모 고치기":"+ 메모"}</button>`:""}${note.memo && !ed ? `<span class="memo">${hand(note.memo)}</span>`:""}</span><b>${t[3]?mmss(t[3]):""}</b>
     ${ed ? `<form class="editor" data-track="${esc(k)}">
       <label>곡 메모<textarea id="tm-${n}" name="memo">${esc(note.memo||"")}</textarea></label>
       <label>공식 음원 영상 링크 (YouTube)<input id="ty-${n}" name="yt" type="url" placeholder="https://www.youtube.com/watch?v=..." value="${esc(note.yt||"")}"></label>
@@ -715,7 +723,7 @@ function month(m){
   const prev = MONTHS[m.i-1], next = MONTHS[m.i+1];
   const season = SEASONS.find(s=>s[0]===seasonOf(m));
   const gc = {}; m.t.forEach(t=>{ if(t[2]) gc[t[2]]=(gc[t[2]]||0)+1; });
-  const genres = Object.entries(gc).sort((a,b)=>b[1]-a[1]).map(([g])=>`<button class="chip" data-k="genre" data-v="${esc(g)}" data-only>${esc(g)}</button>`).join("");
+  const genres = Object.entries(gc).sort((a,b)=>b[1]-a[1]).map(([g])=>`<button class="chip" data-hl="${esc(g)}" aria-pressed="false">${esc(g)}</button>`).join("");
   const writing = editMonth ? `<form class="editor" data-month="${m.id}">
       <label>이 달의 글<textarea id="mx" name="text" placeholder="이 달은 어떤 달이었나요? 어떤 노래를 왜 담았는지 적어 보세요.">${esc(n.text||"")}</textarea></label>
       <label>부제 (사진 아래 한 줄)<input id="mt" name="title" value="${esc(n.title||"")}" placeholder="${esc(count(m.t).slice(0,2).map(a=>a[0]).join(", "))}"></label>
@@ -995,6 +1003,8 @@ function ownerForm(){
 }
 
 app.addEventListener("click",e=>{
+  const hl = e.target.closest("[data-hl]");
+  if (hl){ hlGenre(hl.dataset.hl); return; }
   const yo = e.target.closest("[data-ytopen]");
   if (yo){ track({path:`youtube-${yo.dataset.ytopen}`, title:"YouTube 재생", event:true}); ytOpen = yo.dataset.ytopen; render(true); return; }
   if (e.target.closest('a[href*="music.apple.com"]')) track({path:`apple-music-${monthOfHash()||"home"}`, title:"Apple Music 열기", event:true});
