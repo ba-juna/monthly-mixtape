@@ -330,6 +330,10 @@ a.bx:hover{background:var(--notepad);color:var(--ink)}
 .dj-write .label{color:#b23a63}
 .dj-write .note{max-width:none}
 .dj-write .write{background:rgba(255,255,255,.4)}
+/* writing form takes the whole card while open */
+.dj:has(form[data-month]){grid-template-columns:minmax(0,1fr)}
+.dj:has(form[data-month]) .dj-spine,.dj:has(form[data-month]) .dj-tracks{display:none}
+.dj-write .editor textarea{min-height:min(65vh,560px);font-size:16px;line-height:1.85}
 .dj-spine{display:flex;align-items:center;justify-content:space-between;writing-mode:vertical-rl;transform:rotate(180deg);padding:14px 0;border-inline:1px dashed rgba(120,40,70,.55);background:rgba(255,255,255,.2);min-width:0}
 .dj-spine .head{font-size:30px;line-height:58px}
 .dj-spine .label{line-height:58px}
