@@ -760,16 +760,23 @@ function igWrap(x,text,max){
   return out;
 }
 function igNotes(m,text,av){
-  const paras=text.split(/\n+/).map(s=>s.trim()).filter(Boolean), maxW=IGW-164-66, top=150, bottom=IGH-200;
-  let fs=40, pages=[];
-  for(let s=40;s>=30;s-=2){
-    fs=s; const ctx=igCanvas().getContext("2d"); ctx.font=`500 ${s}px "Gothic A1", "Apple SD Gothic Neo", sans-serif`;
-    const per=Math.floor((bottom-top)/Math.round(s*1.78)); pages=[];
-    for(const p of paras){ const ls=igWrap(ctx,p,maxW); for(let i=0;i<ls.length;i+=per) pages.push(ls.slice(i,i+per)); }
-    if(pages.length<=paras.length) break;
+  // pack paragraphs onto as few slides as possible, largest type that still reaches that count
+  const paras=text.split(/\n+/).map(s=>s.trim()).filter(Boolean), maxW=IGW-164-66, top=150, bottom=IGH-200, H=bottom-top;
+  let best=null;
+  for(let s=40;s>=32;s-=2){
+    const ctx=igCanvas().getContext("2d"); ctx.font=`500 ${s}px "Gothic A1", "Apple SD Gothic Neo", sans-serif`;
+    const lh=Math.round(s*1.78), gap=Math.round(lh*.6), pages=[]; let cur=[], used=0;
+    for(const p of paras){
+      const ls=igWrap(ctx,p,maxW);
+      if(cur.length && used+gap+ls.length*lh>H && ls.length*lh<=H){ pages.push(cur); cur=[]; used=0; }
+      if(cur.length) used+=gap;
+      for(const l of ls){ if(used+lh>H){ pages.push(cur); cur=[]; used=0; } cur.push([l,used]); used+=lh; }
+    }
+    if(cur.length) pages.push(cur);
+    if(!best||pages.length<best.pages.length) best={fs:s,pages};
   }
-  const lh=Math.round(fs*1.78);
-  return pages.map(ls=>{ const [c,x]=igCard(m,av,"Liner notes"); x.font=`500 ${fs}px "Gothic A1", "Apple SD Gothic Neo", sans-serif`; x.fillStyle=IG_INK; x.textBaseline="alphabetic"; ls.forEach((l,i)=>x.fillText(l,164,top+fs+i*lh)); return c; });
+  const {fs,pages}=best;
+  return pages.map(ls=>{ const [c,x]=igCard(m,av,"Liner notes"); x.font=`500 ${fs}px "Gothic A1", "Apple SD Gothic Neo", sans-serif`; x.fillStyle=IG_INK; x.textBaseline="alphabetic"; ls.forEach(([l,y])=>x.fillText(l,164,top+fs+y)); return c; });
 }
 function igTracks(m,av){
   const [c,x]=igCard(m,av,"Tracklist"), rows=m.t.slice(0,9), rowH=112, left=164, right=IGW-66; let y=128;
