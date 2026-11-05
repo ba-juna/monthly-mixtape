@@ -15,6 +15,10 @@ Static site on GitHub Pages. No build step: edit these files and push to `main`.
 - The month page shows the YouTube player only after the black bar is pressed, and only for months with a `yt` link.
 - Footer totals (tapes, tracks, artists) are computed from `tapes.json`.
 
+## Visit counts
+
+GoatCounter: https://monthly-mixtape.goatcounter.com. Month pages count as `/YYYY-MM`; YouTube and Apple Music clicks count as events. Browsers holding the edit key are not counted.
+
 ## Editing on the page
 
 Open the site with `#owner` once per device and paste the edit key. The key is a GitHub fine-grained token limited to this repository (Contents: read and write). It stays in that browser only and must never be committed. Saves commit to `main` and go live in 1 to 2 minutes.

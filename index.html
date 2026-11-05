@@ -471,6 +471,8 @@ button.dyt{width:100%;border:0;cursor:pointer;font:inherit;text-align:left}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
+<script>window.goatcounter={no_onload:true};</script>
+<script data-goatcounter="https://monthly-mixtape.goatcounter.com/count" async src="https://gc.zgo.at/count.js" onload="window.__gcReady&&window.__gcReady()"></script>
 </head>
 <body>
 <svg id="sprite" width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -885,6 +887,21 @@ function pickPhoto(id){
 const GH = window.MT_GH || (()=>{ const h=location.hostname, p=location.pathname.split("/").filter(Boolean); return h.endsWith(".github.io") ? {owner:h.split(".")[0], repo:p[0]||h} : {owner:"",repo:""}; })();
 let ghKey = ""; try { ghKey = localStorage.getItem("mt-gh-key")||""; } catch(_){}
 const base = {}, savedJson = {};
+// visit counts (GoatCounter); browsers holding the edit key are left out
+const gcQueue = [];
+function track(o){
+  if (ghKey) return;
+  const gc = window.goatcounter;
+  if (gc && gc.count) { try { gc.count(o); } catch(_){} } else gcQueue.push(o);
+}
+window.__gcReady = () => { while (gcQueue.length) track(gcQueue.shift()); };
+const monthOfHash = () => location.hash.startsWith("#m-") ? location.hash.slice(3) : "";
+function trackPage(){
+  const h = location.hash;
+  if (h && !h.startsWith("#m-")) return;
+  const id = monthOfHash();
+  track({path:id?`/${id}`:"/", title:id||"Home"});
+}
 async function gh(path, opt={}){
   const r = await fetch(`https://api.github.com/repos/${GH.owner}/${GH.repo}/${path}`, {...opt, cache:"no-store", headers:{Authorization:"Bearer "+ghKey, Accept:"application/vnd.github+json"}});
   if (!r.ok) { const e = new Error("github"); e.code = r.status; throw e; }
@@ -940,7 +957,8 @@ function ownerForm(){
 
 app.addEventListener("click",e=>{
   const yo = e.target.closest("[data-ytopen]");
-  if (yo){ ytOpen = yo.dataset.ytopen; render(true); return; }
+  if (yo){ track({path:`youtube-${yo.dataset.ytopen}`, title:"YouTube 재생", event:true}); ytOpen = yo.dataset.ytopen; render(true); return; }
+  if (e.target.closest('a[href*="music.apple.com"]')) track({path:`apple-music-${monthOfHash()||"home"}`, title:"Apple Music 열기", event:true});
   if (e.target.closest("#editsw")){ editMode=!editMode; editMonth=false; editSite=false; openRow=null; try{localStorage.setItem("mt-editmode",editMode?"1":"");}catch(_){} render(true); return; }
   const pb = e.target.closest("[data-photo]");
   if (pb){ e.preventDefault(); e.stopPropagation(); pickPhoto(pb.dataset.photo); return; }
@@ -982,7 +1000,8 @@ app.addEventListener("submit",e=>{
 
 render(false);
 downloadsNs = {save: async ({filename,data}) => { const a = document.createElement("a"); a.href = URL.createObjectURL(data); a.download = filename; document.body.append(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),4000); }};
-window.addEventListener("hashchange",()=>{ if (location.hash==="#owner") ownerForm(); });
+window.addEventListener("hashchange",()=>{ if (location.hash==="#owner") ownerForm(); trackPage(); });
+trackPage();
 (async()=>{
   if (location.hash==="#owner") ownerForm();
   if (!ghKey) return;
