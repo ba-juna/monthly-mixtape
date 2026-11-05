@@ -589,7 +589,7 @@ function photo(m, shape, cutEdge, title){
   const day = pd ? pd[2] : m.id===latest.id ? new Date().getDate() : new Date(m.y, m.m, 0).getDate();
   const st = `--s1:${s[0]};--s2:${s[1]};--g1:${s[2]};--g2:${s[3]};--g3:${s[4]};--sx:${20+h%60}%;--sy:${14+h%22}%;--hx:${30+h%40}%;--ar:${shape[1]}`;
   return `<div class="frame ${shape[0]}" style="--fc:${FRAMES[m.i%FRAMES.length]}"><div class="fuji" style="${st};${cutEdge?cut(m.i+1):""}">${m===onAir()?`<span class="chip onair inph">On air</span>`:""}
-    ${ph && ph.src ? `<div class="ph"><img src="${esc(PREVIEW[m.id]||ph.src)}" alt="" loading="lazy" decoding="async"></div>` : `<div class="ph dummy"></div><span class="cs">Coming soon</span>`}${editMode&&assetsNs?`<button class="phbtn" data-photo="${m.id}">${ph?"사진 바꾸기":"사진 넣기"}</button>`:""}${title?`<span class="scrim"></span><span class="kv-title">${esc(title)}</span>`:""}<span class="stamp">'${String(pd?pd[0]:m.y).slice(2)} ${pd?pd[1]:m.m} ${day}</span>${ph&&ph.temp?`<span class="dm">임시 사진</span>`:""}</div></div>`;
+    ${ph && ph.src ? `<div class="ph"><img src="${esc(PREVIEW[m.id]||ph.src)}" alt=""${ph.pos?` style="object-position:${esc(ph.pos)}"`:""} loading="lazy" decoding="async"></div>` : `<div class="ph dummy"></div><span class="cs">Coming soon</span>`}${editMode&&assetsNs?`<button class="phbtn" data-photo="${m.id}">${ph?"사진 바꾸기":"사진 넣기"}</button>`:""}${title?`<span class="scrim"></span><span class="kv-title">${esc(title)}</span>`:""}<span class="stamp">'${String(pd?pd[0]:m.y).slice(2)} ${pd?pd[1]:m.m} ${day}</span>${ph&&ph.temp?`<span class="dm">임시 사진</span>`:""}</div></div>`;
 }
 
 function masthead(compact){
