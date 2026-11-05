@@ -354,6 +354,10 @@ a.bx:hover{background:var(--notepad);color:var(--ink)}
 .dyt{display:flex;align-items:center;justify-content:space-between;gap:8px 20px;flex-wrap:wrap;margin-top:22px;background:var(--ink);color:#fff;text-decoration:none;padding:14px 18px}
 .dyt .head{font-size:clamp(24px,3vw,34px)}
 .dyt:hover{background:var(--notepad);color:var(--ink)}
+button.dyt{width:100%;border:0;cursor:pointer;font:inherit;text-align:left}
+.dytp{aspect-ratio:16/9;max-width:100%;margin-top:22px;background:var(--ink)}
+.dytp iframe{display:block;width:100%;height:100%;border:0}
+.ytout{display:inline-block;margin-top:8px;font-size:13px}
 
 .igm{position:fixed;inset:0;z-index:40;background:rgba(20,20,20,.72);overflow:auto;padding:calc(20px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 20px max(16px,env(safe-area-inset-left,0px))}
 .igp{background:#fff;max-width:1100px;margin:0 auto;padding:16px}
@@ -532,6 +536,12 @@ const hand = s => esc(s).replace(/([\u3131-\u318E\uAC00-\uD7A3]+(?:[\s,.!?~]+[\u
 function cut(seed){ const pts=[], r=k=>((Math.sin(seed*91+k*37)+1)/2)*1.6; for(let i=0;i<=10;i++)pts.push(`${i*10}% ${r(i)}%`); for(let i=0;i<=10;i++)pts.push(`${100-r(i+20)}% ${i*10}%`); for(let i=10;i>=0;i--)pts.push(`${i*10}% ${100-r(i+40)}%`); for(let i=10;i>=0;i--)pts.push(`${r(i+60)}% ${i*10}%`); return `clip-path:polygon(${pts.join(",")})`; }
 const amSearch = t => "https://music.apple.com/kr/search?term="+encodeURIComponent(t[0]+" "+t[1]);
 const ytSearch = t => "https://www.youtube.com/results?search_query="+encodeURIComponent(t[1]+" "+t[0]+" official audio");
+// the player loads only after the black bar is pressed
+let ytOpen = null;
+function ytPlayer(yt){
+  const l = new URL(yt).searchParams.get("list");
+  return `<div class="dytp"><iframe src="https://www.youtube-nocookie.com/embed/videoseries?list=${esc(l)}&autoplay=1" title="YouTube 재생목록" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><a class="ytout" href="${esc(yt)}" target="_blank" rel="noopener">유튜브에서 열기 ↗</a>`;
+}
 function safeUrl(u){ try { const x=new URL(u); return x.protocol==="https:"?x.href:""; } catch(e){ return ""; } }
 
 const use = (id,cls,style) => `<svg class="${cls}" style="${style}" viewBox="${id==="dq"?"0 0 60 100":id==="dsq"?"0 0 120 30":"0 0 100 100"}" aria-hidden="true"><use href="#${id}"/></svg>`;
@@ -684,7 +694,7 @@ function month(m){
     <section class="dj${writing?"":" solo"}" aria-label="${FULL[m.m-1]} ${m.y} 글과 곡 목록">
       ${writing?`<div class="dj-write"><span class="label">Liner notes</span>${writing}</div>`:""}${spine}${tracks}
     </section>
-    ${yt?`<a class="dyt" href="${esc(yt)}" target="_blank" rel="noopener"><span class="head">▶ YouTube playlist</span><span class="label">${m.t.length} tracks, ${tapeLen(m)}</span></a>`:""}
+    ${yt?(ytOpen===m.id?ytPlayer(yt):`<button class="dyt" data-ytopen="${m.id}"><span class="head">▶ YouTube playlist</span><span class="label">${m.t.length} tracks, ${tapeLen(m)}</span></button>`):""}
   </article>
   <nav class="bar pn">${prev?`<a href="#m-${prev.id}">← ${en(prev)}</a>`:"<span></span>"}${next?`<a href="#m-${next.id}">${en(next)} →</a>`:"<span></span>"}</nav>
   ${footer()}</div>`;
@@ -827,7 +837,7 @@ function render(keepScroll){
   else window.scrollTo(0,0);
 }
 function goArchive(){ if (location.hash!=="#tapes") location.hash="tapes"; else render(false); }
-window.addEventListener("hashchange",()=>{ openRow=null; editMonth=false; render(false); });
+window.addEventListener("hashchange",()=>{ openRow=null; editMonth=false; ytOpen=null; render(false); });
 window.addEventListener("resize",()=>{ const c=colCount(); if(c!==cols){ cols=c; render(true); } });
 
 function toast(msg){
@@ -922,6 +932,8 @@ function ownerForm(){
 }
 
 app.addEventListener("click",e=>{
+  const yo = e.target.closest("[data-ytopen]");
+  if (yo){ ytOpen = yo.dataset.ytopen; render(true); return; }
   if (e.target.closest("#editsw")){ editMode=!editMode; editMonth=false; editSite=false; openRow=null; try{localStorage.setItem("mt-editmode",editMode?"1":"");}catch(_){} render(true); return; }
   const pb = e.target.closest("[data-photo]");
   if (pb){ e.preventDefault(); e.stopPropagation(); pickPhoto(pb.dataset.photo); return; }

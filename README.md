@@ -12,6 +12,7 @@ Static site on GitHub Pages. No build step: edit these files and push to `main`.
 
 - The home feature, the ticker and the On air chip follow the post with the newest `at`, not the calendar.
 - A month with no photo shows the film-grain black box with Coming soon.
+- The month page shows the YouTube player only after the black bar is pressed, and only for months with a `yt` link.
 - Footer totals (tapes, tracks, artists) are computed from `tapes.json`.
 
 ## Editing on the page
