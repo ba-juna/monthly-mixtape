@@ -193,7 +193,10 @@ body.editing .ticker{background:var(--f-red)}
 .ycard h3{margin:10px 0 0;font-size:28px}
 .ycard .date{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
 .ycard .sub{margin:2px 0 0;font-size:15px;line-height:1.4;text-wrap:balance}
-.ycard .date .trk{margin-left:auto}
+.ctop{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px 10px;margin-top:10px}
+.ycard .ctop h3{margin:0}
+.stat{font-family:var(--f-mono);font-size:11px;letter-spacing:.01em;text-transform:uppercase;line-height:1.4;background:var(--ink);color:#fff;padding:2px 7px;white-space:nowrap}
+.ycard .sub.kr{font-size:14px;color:var(--muted);margin:0}
 .ygrid{margin-bottom:10px}
 .ycard p{margin:0;font-size:13.5px;line-height:1.7;color:#3a3a38;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .jc{list-style:none;margin:2px 0 0;padding:0;border-top:1.5px solid var(--ink)}
@@ -627,8 +630,7 @@ const visRows = m => Math.min(m.t.length, Math.round(3 + m.t.length*0.18));
 const hoverRows = m => Math.min(m.t.length, visRows(m)+10);
 function ycard(m){
   const n = mnote(m), vis = visRows(m), more = hoverRows(m);
-  return `<a class="ycard" href="#m-${m.id}">${photo(m,["thin","1/1"])}<h3 class="head">${en(m)}</h3>
-    <span class="date"><span class="tapelen">${tapeLen(m)}</span><span class="trk">${m.t.length} tracks</span>${F.genre?` &nbsp;<span class="chip">${esc(F.genre)} ${genreCount(m,F.genre)} tracks</span>`:""}</span>
+  return `<a class="ycard" href="#m-${m.id}">${photo(m,["thin","1/1"])}<div class="ctop"><h3 class="head">${en(m)}</h3><span class="stat">${m.t.length} tracks, ${tapeLen(m)}</span></div>${F.genre?`<span class="date"><span class="chip">${esc(F.genre)} ${genreCount(m,F.genre)} tracks</span></span>`:""}
     <p class="sub kr">${esc(subtitle(m))}</p>${n.text?`<p>${esc(n.text)}</p>`:""}<div class="jcwrap${vis<m.t.length?" cut":""}${more===m.t.length?" all":""}" style="--v:${vis};--x:${more}"><ol class="jc">${m.t.slice(0,more).map((t,i)=>`<li><span class="n">${String(i+1).padStart(2,"0")}</span><span class="tt">${esc(t[0])}</span><span class="d">${t[3]?mmss(t[3]):""}</span></li>`).join("")}</ol></div></a>`;
 }
 function matches(m){
