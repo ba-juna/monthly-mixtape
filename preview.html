@@ -507,6 +507,12 @@ body.playing .mast-av .avw img,body.playing .foot .avw img{animation:bob .55s ea
   .pg.yel::after,.pg.sheet::before{display:none}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+body.oB .dj-tracks li.dim{opacity:1}
+body.oB .dj-tracks li.hit .tt a{background:linear-gradient(transparent 50%,#ffe45c 50% 94%,transparent 94%);-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.optbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:35;background:#fff;border-bottom:3px solid var(--ink);padding:8px max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px));display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.optbar button{border:1.5px solid var(--ink);background:#fff;color:var(--ink);font-weight:800;font-size:13px;padding:4px 12px;cursor:pointer}
+.optbar button[aria-pressed="true"]{background:var(--notepad)}
+.optbar p{margin:0;font-size:13px;line-height:1.4;min-width:0;flex:1 1 200px}
 </style>
 </head>
 <body>
@@ -518,6 +524,7 @@ body.playing .mast-av .avw img,body.playing .foot .avw img{animation:bob .55s ea
   <symbol id="dq" viewBox="0 0 60 100"><path d="M10 26 C10 8 48 2 50 24 C52 42 30 46 29 62 L29 70"/><path d="M28 86 C30 88 31 90 29 92"/></symbol>
   <symbol id="dsq" viewBox="0 0 120 30"><path d="M4 18 C14 4 22 4 30 16 C38 28 46 28 54 14 C62 2 70 4 78 16 C86 28 96 26 116 10"/></symbol>
 </svg>
+<div class="optbar"><button data-o="A">A 나머지 흐리게</button><button data-o="B">B 형광펜</button><p>장르 라벨을 눌러보세요.</p></div>
 <div id="app"></div>
 <button class="totop at-top" id="totop" type="button" aria-label="맨 위로">Top</button>
 <script type="application/json" id="data"></script>
@@ -582,7 +589,7 @@ const ytSearch = t => "https://www.youtube.com/results?search_query="+encodeURIC
 function hlGenre(g){
   const b = document.querySelector(`[data-hl="${CSS.escape(g)}"]`), on = b.getAttribute("aria-pressed")!=="true";
   document.querySelectorAll("[data-hl]").forEach(x=>x.setAttribute("aria-pressed", on && x===b));
-  document.querySelectorAll(".dj-tracks li[data-g]").forEach(li=>li.classList.toggle("dim", on && li.dataset.g!==g));
+  document.querySelectorAll(".dj-tracks li[data-g]").forEach(li=>{ li.classList.toggle("dim", on && li.dataset.g!==g); li.classList.toggle("hit", on && li.dataset.g===g); });
   if (on && matchMedia("(max-width:760px)").matches) document.querySelector(".dj-tracks").scrollIntoView({behavior:"smooth",block:"start"});
 }
 // the player loads only after the black bar is pressed
@@ -1080,6 +1087,10 @@ trackPage();
     window.__boot();
   } catch(e){ document.getElementById("app").textContent = "페이지를 불러오지 못했어요. 새로고침해 주세요."; }
 })();
+</script>
+<script>
+(function(){function set(o){document.body.classList.toggle("oB",o==="B");document.querySelectorAll("[data-o]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.o===o));}
+document.querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>set(b.dataset.o));set("A");if(!location.hash)location.hash="#m-2026-10";})();
 </script>
 </body>
 </html>
