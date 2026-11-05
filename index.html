@@ -50,7 +50,7 @@ body.zine::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:3
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .2 0 0 0 0 .16 0 0 0 0 .1 0 0 0 1.6 -.3'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23p)'/%3E%3C/svg%3E")}
 .scrawl{font-family:var(--f-hand);text-transform:lowercase;line-height:1}
 .caps{text-transform:uppercase}
-.label{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;line-height:1.4}
+.label{font-family:var(--f-mono);font-size:11px;letter-spacing:.01em;text-transform:uppercase;line-height:1.4}
 
 /* ticker: running band at the very top, links to this month's tape */
 .ticker{display:block;background:var(--ink);color:#fff;text-decoration:none;overflow:hidden;white-space:nowrap;padding-block:5px;font-family:var(--f-head),var(--f-kr);text-transform:uppercase;font-size:13px;line-height:1.2;letter-spacing:.05em}
@@ -87,7 +87,6 @@ body.editing .ticker{background:var(--f-red)}
 .tagline .head{font-size:var(--t2)}
 .tagline .label{font-size:var(--t4)}
 .tagline{gap:8px}
-.mast .tagline .label{font-family:var(--f-body);font-weight:500;font-size:14px;letter-spacing:0;text-transform:none}
 .page.compact .mast h1{font-size:clamp(40px,6vw,72px)}
 .page.compact .tagline .kr{font-size:15px}
 .page.compact .tagline .head{font-size:18px}
@@ -381,6 +380,7 @@ button.dyt{width:100%;border:0;cursor:pointer;font:inherit;text-align:left}
 .fsign{grid-column:1/-1;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.28);padding-top:14px;font-size:14px}
 .fsign a{color:#fff;text-decoration:none;font-weight:700}
 .fsign a:hover{text-decoration:underline}
+.fsign{align-items:center}
 
 /* editing */
 .editor{display:grid;gap:9px;background:var(--paper-2);border:3px solid var(--ink);padding:12px}
@@ -406,7 +406,6 @@ button.dyt{width:100%;border:0;cursor:pointer;font:inherit;text-align:left}
   .tagline{justify-items:start;text-align:left;gap:4px}
   .tagline .head{font-size:18px}
   .tagline .label{font-size:10px}
-  .mast .tagline .label{font-size:13px}
   .bar{min-height:40px;gap:4px 16px;padding:5px 10px}
   .bar a,.bar .lk{font-size:17px}
   .lkb{flex-basis:100%}
@@ -424,7 +423,7 @@ button.dyt{width:100%;border:0;cursor:pointer;font:inherit;text-align:left}
   .see{font-size:16px}
   .fimg{padding:18px 0 0}
   .sec h2{font-size:40px}
-  .label{font-size:10px;letter-spacing:.08em}
+  .label{font-size:10px}
   .chip{font-size:11px;padding:3px 7px}
   .filters{gap:6px;padding:9px 10px}
   .ygrid{gap:14px}
@@ -582,7 +581,7 @@ function footer(){
   return `<footer class="foot" id="about">
     <p class="fstats"><span><b>${MONTHS.length}</b>tapes</span><span><b>${total.toLocaleString()}</b>tracks</span><span><b>${ALL_ARTISTS.length.toLocaleString()}</b>artists</span></p>
     <a class="fav" href="${IG}" target="_blank" rel="noopener" aria-label="@ba.juna 인스타그램">${avatar()}</a>
-    <div class="fsign"><span>Every month since January 2021</span><a href="${IG}" target="_blank" rel="noopener">@ba.juna</a></div>
+    <div class="fsign"><span class="label">Every month since January 2021</span><a href="${IG}" target="_blank" rel="noopener">@ba.juna</a></div>
   </footer>`;
 }
 
