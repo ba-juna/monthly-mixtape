@@ -42,6 +42,7 @@ button,input,textarea{font:inherit;color:inherit}
 .page{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:22px 0}
 .head{font-family:var(--f-head);font-weight:400;text-transform:uppercase;letter-spacing:0;line-height:.95}
 .kr{font-family:var(--f-kr);font-weight:800;letter-spacing:-.035em;line-height:1.4}
+.sub.kr{font-weight:500;letter-spacing:-.02em}
 .hand{font-family:var(--f-hand);font-weight:400;letter-spacing:.01em;line-height:1.12}
 .ko{font-family:"Nanum Pen Script",cursive;font-size:1.28em;letter-spacing:0;line-height:1}
 .sech{font-size:clamp(50px,6vw,78px);margin:0;line-height:.9}
@@ -552,7 +553,11 @@ const hm = x => { const mi = Math.round(x/60); return mi>=60 ? `${Math.floor(mi/
 function tapeLen(m){ return `${Math.round(secs(m)/60).toLocaleString()} min`; }
 const genreCount = (m,g) => m.t.reduce((a,t)=>a+(t[2]===g?1:0),0);
 const GENRES = (()=>{ const c={}; MONTHS.forEach(m=>m.t.forEach(t=>{ if(t[2]) c[t[2]]=(c[t[2]]||0)+1; })); return Object.entries(c).sort((a,b)=>b[1]-a[1]); })();
-function subtitle(m){ return mnote(m).title || count(m.t).slice(0,2).map(a=>a[0]).join(", "); }
+function subtitle(m){
+  const t = mnote(m).title; if (t) return t;
+  const c = count(m.t), rest = c.length-2;
+  return c.slice(0,2).map(a=>a[0]).join(", ") + (rest>0 ? ` and ${rest} more` : "");
+}
 const hand = s => esc(s).replace(/([\u3131-\u318E\uAC00-\uD7A3]+(?:[\s,.!?~]+[\u3131-\u318E\uAC00-\uD7A3]+)*)/g,'<span class="ko">$1</span>');
 function cut(seed){ const pts=[], r=k=>((Math.sin(seed*91+k*37)+1)/2)*1.6; for(let i=0;i<=10;i++)pts.push(`${i*10}% ${r(i)}%`); for(let i=0;i<=10;i++)pts.push(`${100-r(i+20)}% ${i*10}%`); for(let i=10;i>=0;i--)pts.push(`${i*10}% ${100-r(i+40)}%`); for(let i=10;i>=0;i--)pts.push(`${r(i+60)}% ${i*10}%`); return `clip-path:polygon(${pts.join(",")})`; }
 const amSearch = t => "https://music.apple.com/kr/search?term="+encodeURIComponent(t[0]+" "+t[1]);
