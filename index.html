@@ -335,9 +335,9 @@ body.editing .ticker{background:var(--f-red)}
   .dinfo{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;padding:22px 0 26px}
   .drow{display:contents}
   .dinfo .sub{grid-column:1;grid-row:1;font-size:22px}
-  .drow .write.small{grid-column:2;grid-row:1}
-  .drow > a.bx{grid-column:3;grid-row:1}
-  .drow .meta{grid-column:1/-1;grid-row:2;margin:0}
+  .drow .write.small{grid-column:2/4;grid-row:1;justify-self:end}
+  .drow > a.bx{grid-column:3;grid-row:2;align-self:start;display:flex;align-items:center;height:24px;padding-block:0}
+  .drow .meta{grid-column:1/3;grid-row:2;margin:0}
 }
 a.bx{background:var(--ink);color:#fff;font-family:var(--f-body);font-weight:500;font-size:14px;line-height:1.3;text-transform:lowercase;padding:4px 10px;white-space:nowrap;text-decoration:none}
 a.bx:hover{background:var(--notepad);color:var(--ink)}
