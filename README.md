@@ -29,6 +29,7 @@ Open the site with `#owner` once per device and paste the edit key. The key is a
 ## Monthly routine
 
 1. Export the finished month from the Music app and update `data/tapes.json`.
+   Then in `../source` run `am_resolve.py`, `am_krcheck.py`, `am_apply.py` for exact song links. Ids missing from the Korean store are blanked and stay search links.
 2. Write the post and set the photo on the page in edit mode.
 3. Add the Apple Music and YouTube links to that month.
 4. Export the Instagram slides from the month page and post.
