@@ -77,8 +77,6 @@ body.editing .ticker{background:var(--f-red)}
 .mast-av{display:inline-flex;flex:none;width:.74em;height:.74em}
 .mast-av .avatar{width:100%;height:100%}
 .mast h1 > a:first-child{min-width:0}
-.mast-av:hover .avatar{transform:rotate(-6deg)}
-.mast-av .avatar{transition:transform .2s}
 .tagline{margin:0;display:grid;gap:6px;justify-items:end;text-align:right;padding-bottom:4px}
 .ig{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
 .ig:hover .head{text-decoration:underline;text-underline-offset:3px}
@@ -380,6 +378,14 @@ button.dyt{width:100%;border:0;cursor:pointer;font:inherit;text-align:left}
 .fsign{grid-column:1/-1;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.28);padding-top:14px;font-size:14px}
 .fsign a{color:#fff;text-decoration:none;font-weight:700}
 .fsign a:hover{text-decoration:underline}
+/* the circle stays still; the character bobs on page load, on hover and while the YouTube player is open */
+.avatar.avw{display:block;background:#141414;overflow:hidden}
+.avw img{display:block;width:100%;height:100%;transform-origin:50% 82%}
+@keyframes bob{0%,100%{transform:rotate(0)}25%{transform:rotate(-9deg)}75%{transform:rotate(9deg)}}
+body.intro .mast-av .avw img{animation:bob .55s ease-in-out 3}
+.mast-av:hover .avw img,.fav:hover .avw img{animation:bob .55s ease-in-out 2}
+body.playing .mast-av .avw img,body.playing .foot .avw img{animation:bob .55s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.avw img{animation:none!important}}
 .fsign{align-items:center}
 
 /* editing */
@@ -514,7 +520,7 @@ const AM_PROFILE = "https://music.apple.com/profile/joona941007";
 const IG = "https://www.instagram.com/ba.juna/";
 const YT_PROFILE = "https://www.youtube.com/@ba_juna";
 const AVATAR = (document.getElementById("avatar")||{}).textContent?.trim() || "";
-const avatar = () => /^data:image\/(jpeg|png|webp);base64,/.test(AVATAR) ? `<img class="avatar" src="${AVATAR}" alt="ba.juna 프로필">` : `<span class="avatar" aria-hidden="true">ba</span>`;
+const avatar = () => /^data:image\/(jpeg|png|webp);base64,/.test(AVATAR) ? `<span class="avatar avw"><img src="${AVATAR}" alt="ba.juna 프로필"></span>` : `<span class="avatar" aria-hidden="true">ba</span>`;
 
 let F = {year:YEARS[0], season:null, month:null, genre:null, artist:null}, shown = 12;
 let downloadsNs=null, editing=false, editMonth=false, editSite=false, canEdit=false, editMode=false, assetsNs=null, busy=false, art=null, openRow=null, cols=colCount(), allCredits=false;
@@ -841,6 +847,7 @@ function render(keepScroll){
   const h = location.hash.slice(1), y = window.scrollY;
   const m = h.startsWith("m-") && byId[h.slice(2)];
   document.body.classList.toggle("editing", editMode);
+  document.body.classList.toggle("playing", !!ytOpen);
   app.innerHTML = ticker() + (m ? month(m) : home()) + editSwitch();
   if (keepScroll) window.scrollTo(0,y);
   else if (!m && h) document.getElementById(h)?.scrollIntoView();
@@ -999,6 +1006,7 @@ app.addEventListener("submit",e=>{
   openRow=null; save();
 });
 
+document.body.classList.add("intro"); setTimeout(()=>document.body.classList.remove("intro"),2000);
 render(false);
 downloadsNs = {save: async ({filename,data}) => { const a = document.createElement("a"); a.href = URL.createObjectURL(data); a.download = filename; document.body.append(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),4000); }};
 window.addEventListener("hashchange",()=>{ if (location.hash==="#owner") ownerForm(); trackPage(); });
