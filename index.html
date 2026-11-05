@@ -581,7 +581,8 @@ function subtitle(m){
 }
 const hand = s => esc(s).replace(/([\u3131-\u318E\uAC00-\uD7A3]+(?:[\s,.!?~]+[\u3131-\u318E\uAC00-\uD7A3]+)*)/g,'<span class="ko">$1</span>');
 function cut(seed){ const pts=[], r=k=>((Math.sin(seed*91+k*37)+1)/2)*1.6; for(let i=0;i<=10;i++)pts.push(`${i*10}% ${r(i)}%`); for(let i=0;i<=10;i++)pts.push(`${100-r(i+20)}% ${i*10}%`); for(let i=10;i>=0;i--)pts.push(`${i*10}% ${100-r(i+40)}%`); for(let i=10;i>=0;i--)pts.push(`${r(i+60)}% ${i*10}%`); return `clip-path:polygon(${pts.join(",")})`; }
-const amSearch = t => "https://music.apple.com/kr/search?term="+encodeURIComponent(t[0]+" "+t[1]);
+// exact song link when we have its ids ("album/track"), otherwise an Apple Music search
+const amSearch = t => { const [al,tr] = String(t[4]||"").split("/"); return tr ? `https://music.apple.com/kr/album/${al}?i=${tr}` : "https://music.apple.com/kr/search?term="+encodeURIComponent(t[0]+" "+t[1]); };
 const ytSearch = t => "https://www.youtube.com/results?search_query="+encodeURIComponent(t[1]+" "+t[0]+" official audio");
 // month page: a genre label marks its tracks and scrolls to the first one
 function hlGenre(g){

@@ -3,7 +3,7 @@
 Static site on GitHub Pages. No build step: edit these files and push to `main`.
 
 - `index.html`: layout, styles, all page code
-- `data/tapes.json`: months and tracks, `[{id:"YYYY-MM", y, m, t:[[title, artist, genre, seconds], ...]}]`, oldest first
+- `data/tapes.json`: months and tracks, `[{id:"YYYY-MM", y, m, t:[[title, artist, genre, seconds, "albumId/trackId"], ...]}]`, oldest first. The last field is the Apple Music song id, optional
 - `data/notes.json`: writing and links. `m["YYYY-MM"] = {text, at, am, yt}`; `at` is when the writing was first posted
 - `data/photos.json`: `{"YYYY-MM": {src, date}}`; `date` is the capture date shown as the orange stamp
 - `photos/YYYY-MM.jpg`: month covers, long edge about 1200px
