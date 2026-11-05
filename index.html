@@ -14,7 +14,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<style>:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@500;600&family=IBM+Plex+Mono:wght@400;500&family=Gothic+A1:wght@400;500;700;800;900&family=Nanum+Pen+Script&family=VT323&display=swap">
 <style id="css">
 /* Layout: magazine masthead + boxed bars, this month's tape up top, tape list in journal cards, filtered by year/season/month/artist, artist credits at the foot.
@@ -39,7 +39,7 @@ body{background-color:var(--paper);color:var(--ink);font-family:var(--f-body);fo
 a{color:inherit}
 button,input,textarea{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--f-blue);outline-offset:2px}
-.page{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.page{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:22px 0}
 .head{font-family:var(--f-head);font-weight:400;text-transform:uppercase;letter-spacing:0;line-height:.95}
 .kr{font-family:var(--f-kr);font-weight:800;letter-spacing:-.035em;line-height:1.4}
 .hand{font-family:var(--f-hand);font-weight:400;letter-spacing:.01em;line-height:1.12}
@@ -373,7 +373,7 @@ button.dyt{width:100%;border:0;cursor:pointer;font:inherit;text-align:left}
 /* footer */
 .zine .bar{border-color:transparent}
 .zine .bar::after{content:"";position:absolute;inset:-3px;border:3px solid var(--ink);filter:url(#rough);pointer-events:none}
-.foot{background:var(--ink);color:#fff;position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:22px 32px;align-items:end;padding:30px 30px 18px;margin-top:48px}
+.foot{background:var(--ink);color:#fff;position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:22px 32px;align-items:end;padding:30px 30px calc(18px + env(safe-area-inset-bottom,0px));margin-top:48px}
 .fstats{display:flex;gap:10px 40px;flex-wrap:wrap;margin:0;font-family:var(--f-head);text-transform:uppercase;font-size:18px;line-height:1}
 .fstats b{display:block;font-weight:400;font-size:clamp(44px,5vw,64px);line-height:.9;margin-bottom:6px;font-variant-numeric:tabular-nums}
 .fline{margin:0;font-family:var(--f-kr);font-weight:800;font-size:clamp(18px,1.8vw,22px);line-height:1.45;letter-spacing:-.035em;text-align:right}
@@ -415,7 +415,7 @@ body.playing .mast-av .avw img,body.playing .foot .avw img{animation:bob .55s ea
   /* phone type scale: 1 masthead (fills the width) / 2 date titles 52 / 3 section heads 40 / 4 card titles 26 / 5 nav 17 / 6 KR subtitles 16-18 / 7 body 15 / 8 lists, chips 11-12 */
   body{font-size:15px;line-height:1.7}
   .ticker{font-size:11px;padding-block:5px;letter-spacing:.06em}
-  .page{padding-block:16px 32px}
+  .page{padding-block:16px 0}
   .mast{grid-template-columns:minmax(0,1fr);gap:8px;padding-bottom:14px}
   .mast h1{white-space:nowrap;font-size:11.2vw;letter-spacing:-.005em;line-height:.9}
   .mast-av{width:.74em;height:.74em}
@@ -471,7 +471,7 @@ body.playing .mast-av .avw img,body.playing .foot .avw img{animation:bob .55s ea
   .fstats{gap:8px 26px;font-size:14px}
   .fstats b{font-size:40px}
   .fsign{font-size:13px}
-  .foot{padding:22px 18px 14px}
+  .foot{padding:22px 18px calc(14px + env(safe-area-inset-bottom,0px))}
   .fav{position:absolute;right:18px;top:20px}
   .foot .avatar,.page.compact .foot .avatar{--av:60px}
   .dphoto .fuji{aspect-ratio:4/3!important}
