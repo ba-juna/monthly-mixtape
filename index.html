@@ -705,7 +705,7 @@ function month(m){
   const prev = MONTHS[m.i-1], next = MONTHS[m.i+1];
   const season = SEASONS.find(s=>s[0]===seasonOf(m));
   const gc = {}; m.t.forEach(t=>{ if(t[2]) gc[t[2]]=(gc[t[2]]||0)+1; });
-  const genres = Object.entries(gc).sort((a,b)=>b[1]-a[1]).slice(0,2).map(([g])=>`<button class="chip" data-k="genre" data-v="${esc(g)}" data-only>${esc(g)}</button>`).join("");
+  const genres = Object.entries(gc).sort((a,b)=>b[1]-a[1]).map(([g])=>`<button class="chip" data-k="genre" data-v="${esc(g)}" data-only>${esc(g)}</button>`).join("");
   const writing = editMonth ? `<form class="editor" data-month="${m.id}">
       <label>이 달의 글<textarea id="mx" name="text" placeholder="이 달은 어떤 달이었나요? 어떤 노래를 왜 담았는지 적어 보세요.">${esc(n.text||"")}</textarea></label>
       <label>부제 (사진 아래 한 줄)<input id="mt" name="title" value="${esc(n.title||"")}" placeholder="${esc(count(m.t).slice(0,2).map(a=>a[0]).join(", "))}"></label>
