@@ -476,11 +476,13 @@ button.dyt{width:100%;border:0;cursor:pointer;font:inherit;text-align:left}
 :root{--bob-a:5deg;--bob-t:.8s}
 body.b2{--bob-a:9deg;--bob-t:.55s}
 @keyframes bob{0%,100%{transform:rotate(0)}25%{transform:rotate(calc(var(--bob-a) * -1))}75%{transform:rotate(var(--bob-a))}}
-.avatar{transform-origin:50% 82%}
-body.intro .mast-av .avatar{animation:bob var(--bob-t) ease-in-out 3}
-.mast-av:hover .avatar,.fav:hover .avatar{transform:none;animation:bob var(--bob-t) ease-in-out 2}
-body.playing .mast-av .avatar,body.playing .foot .avatar{animation:bob var(--bob-t) ease-in-out infinite}
-@media (prefers-reduced-motion:reduce){.avatar{animation:none!important}}
+.avatar.avw{display:block;background:#141414;overflow:hidden}
+.avw img{display:block;width:100%;height:100%;transform-origin:50% 82%}
+.mast-av:hover .avatar{transform:none}
+body.intro .mast-av .avw img{animation:bob var(--bob-t) ease-in-out 3}
+.mast-av:hover .avw img,.fav:hover .avw img{animation:bob var(--bob-t) ease-in-out 2}
+body.playing .mast-av .avw img,body.playing .foot .avw img{animation:bob var(--bob-t) ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.avw img{animation:none!important}}
 .optbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:35;background:#fff;border-bottom:3px solid var(--ink);padding:8px max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px));display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
 .optbar button{border:1.5px solid var(--ink);background:#fff;color:var(--ink);font-weight:800;font-size:13px;padding:4px 12px;cursor:pointer}
 .optbar button[aria-pressed="true"]{background:var(--notepad)}
@@ -527,7 +529,7 @@ const AM_PROFILE = "https://music.apple.com/profile/joona941007";
 const IG = "https://www.instagram.com/ba.juna/";
 const YT_PROFILE = "https://www.youtube.com/@ba_juna";
 const AVATAR = (document.getElementById("avatar")||{}).textContent?.trim() || "";
-const avatar = () => /^data:image\/(jpeg|png|webp);base64,/.test(AVATAR) ? `<img class="avatar" src="${AVATAR}" alt="ba.juna 프로필">` : `<span class="avatar" aria-hidden="true">ba</span>`;
+const avatar = () => /^data:image\/(jpeg|png|webp);base64,/.test(AVATAR) ? `<span class="avatar avw"><img src="${AVATAR}" alt="ba.juna 프로필"></span>` : `<span class="avatar" aria-hidden="true">ba</span>`;
 
 let F = {year:YEARS[0], season:null, month:null, genre:null, artist:null}, shown = 12;
 let downloadsNs=null, editing=false, editMonth=false, editSite=false, canEdit=false, editMode=false, assetsNs=null, busy=false, art=null, openRow=null, cols=colCount(), allCredits=false;
@@ -1047,7 +1049,7 @@ function set(o){B.classList.toggle("b2",o==="2");document.querySelectorAll("[dat
 document.querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>set(b.dataset.o));
 document.getElementById("again").onclick=intro;
 const p=document.getElementById("play");p.onclick=()=>{const on=B.classList.toggle("playing");p.setAttribute("aria-pressed",on);};
-const w=setInterval(()=>{if(document.querySelector(".mast-av .avatar")){clearInterval(w);set("1");}},50);})();
+const w=setInterval(()=>{if(document.querySelector(".mast-av .avw img")){clearInterval(w);set("1");}},50);})();
 </script>
 </body>
 </html>
