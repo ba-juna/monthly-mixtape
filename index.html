@@ -393,7 +393,7 @@ button.dyt{width:100%;border:0;cursor:pointer;font:inherit;text-align:left}
 /* footer */
 .zine .bar{border-color:transparent}
 .zine .bar::after{content:"";position:absolute;inset:-3px;border:3px solid var(--ink);filter:url(#rough);pointer-events:none}
-.foot{background:var(--ink);color:#fff;position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:22px 32px;align-items:end;padding:30px 30px calc(18px + env(safe-area-inset-bottom,0px));margin-top:48px}
+.foot{background:var(--ink);color:#fff;position:relative;box-shadow:0 0 0 100vmax var(--ink);clip-path:inset(0 -100vmax);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:22px 32px;align-items:end;padding:30px 30px calc(18px + env(safe-area-inset-bottom,0px));margin-top:48px}
 .fstats{display:flex;gap:10px 40px;flex-wrap:wrap;margin:0;font-family:var(--f-head);text-transform:uppercase;font-size:18px;line-height:1}
 .fstats b{display:block;font-weight:400;font-size:clamp(44px,5vw,64px);line-height:.9;margin-bottom:6px;font-variant-numeric:tabular-nums}
 .fline{margin:0;font-family:var(--f-kr);font-weight:800;font-size:clamp(18px,1.8vw,22px);line-height:1.45;letter-spacing:-.035em;text-align:right}
