@@ -528,13 +528,11 @@ body.playing .mast-av .avw img,body.playing .foot .avw img{animation:bob .55s ea
   html[data-v] .finfo p{font-size:16px}
   html[data-v] .note{font-size:16.5px;line-height:1.85}
   html[data-v] .dj-write{padding:18px 16px}
-  /* tracks: no handwriting on phones, title over artist */
+  /* tracks: original handwriting, title over artist */
   html[data-v] .dj-tracks{padding:6px 16px 14px}
-  html[data-v] .dj-tracks li{grid-template-columns:28px minmax(0,1fr) auto;gap:6px;font-family:var(--f-body);font-size:16px;font-weight:600;line-height:1.35;letter-spacing:-.01em;color:var(--ink);padding:10px 0}
-  html[data-v] .dj-tracks li small{display:block;margin:3px 0 0;font-size:13.5px;font-weight:500;color:#6b3a4c}
-  html[data-v] .dj-tracks li b{font-family:var(--f-mono);font-size:12.5px;font-weight:400;color:#6b3a4c}
-  html[data-v] .dj-tracks li i{font-size:12.5px}
-  html[data-v] .dj-tracks .ko{font-size:1em}
+  html[data-v] .dj-tracks li{grid-template-columns:28px minmax(0,1fr) auto;gap:6px;padding:7px 0}
+  html[data-v] .dj-tracks li small{display:block;margin:0}
+  html[data-v] .dj-tracks li i{font-size:12px}
   /* filters: one labelled row per group, swipe sideways */
   html[data-v] .filters{display:block;padding:0;border-width:2px}
   .fg{display:grid;grid-template-columns:62px minmax(0,1fr);align-items:center;border-bottom:1px solid #141414}
@@ -553,6 +551,18 @@ body.playing .mast-av .avw img,body.playing .foot .avw img{animation:bob .55s ea
   html[data-v=A] .jc .n,html[data-v=A] .jc .d{font-size:12.5px}
   html[data-v=A] .jcwrap{--rh:37px}
   .pvjump{display:inline-block;align-self:flex-start;margin-top:8px;border:1.5px solid var(--ink);padding:6px 11px;font-size:14px;line-height:1.3;text-decoration:none;background:none;color:var(--ink);font-family:var(--f-body);font-weight:500}
+  /* C: A with two tapes per row */
+  html[data-v=C] .ygrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 12px}
+  html[data-v=C] .ycol{display:contents}
+  html[data-v=C] .ycard{gap:4px}
+  html[data-v=C] .ycard .fuji{aspect-ratio:1/1!important}
+  html[data-v=C] .ycard .fuji .cs{font-size:18px;white-space:nowrap}
+  html[data-v=C] .ycard .fuji .chip,html[data-v=C] .ycard .fuji .onair{transform:scale(.8);transform-origin:0 0}
+  html[data-v=C] .ycard>p:not(.sub),html[data-v=C] .ycard .jcwrap{display:none}
+  html[data-v=C] .ctop{display:block;margin-top:6px}
+  html[data-v=C] .ycard h3{font-size:27px;line-height:1.05}
+  html[data-v=C] .ycard .stat{display:block;width:max-content;background:none;color:var(--muted);padding:0;margin-top:3px;font-size:11.5px}
+  html[data-v=C] .ycard .sub.kr{font-size:14.5px;line-height:1.3;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   /* B */
   html[data-v=B] .filters.shut .fg{display:none}
   html[data-v=B] .filters.shut .ftog{padding-block:13px}
@@ -1156,8 +1166,8 @@ trackPage();
 <script id="pvjs">
 (()=>{
 const v=new URLSearchParams(location.search).get('v')||'A'; if(v!=='0')document.documentElement.dataset.v=v;
-const sw=document.createElement('div');sw.className='pvsw';sw.innerHTML=[['0','지금'],['A','A'],['B','B']].map(([k,l])=>`<a href="?v=${k}${location.hash}" class="${k===v?'on':''}">${l}</a>`).join('');
-addEventListener('hashchange',()=>sw.querySelectorAll('a').forEach((a,i)=>a.href='?v='+['0','A','B'][i]+location.hash));
+const sw=document.createElement('div');sw.className='pvsw';sw.innerHTML=[['0','지금'],['A','A'],['B','B'],['C','C']].map(([k,l])=>`<a href="?v=${k}${location.hash}" class="${k===v?'on':''}">${l}</a>`).join('');
+addEventListener('hashchange',()=>sw.querySelectorAll('a').forEach((a,i)=>a.href='?v='+['0','A','B','C'][i]+location.hash));
 document.body.append(sw);
 if(v==='0')return;
 const narrow=matchMedia('(max-width:760px)');
@@ -1180,7 +1190,7 @@ function deco(){
   if(dj&&!dj.dataset.pv&&!dj.classList.contains('solo')&&dj.querySelector('.dj-write')&&!dj.querySelector('form')){
     dj.dataset.pv=1;
     const n=dj.querySelectorAll('.dj-tracks li').length;
-    if(v==='A'){
+    if(v!=='B'){
       const d=document.querySelector('.dinfo');const a=document.createElement('button');a.className='pvjump';a.textContent=`Tracks ${n} ↓`;a.onclick=()=>dj.querySelector('.dj-spine').scrollIntoView({behavior:'smooth'});d.append(a);
     } else {
       tab='notes';dj.classList.add('tabbed');dj.dataset.tab=tab;
